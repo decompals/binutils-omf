@@ -1956,7 +1956,7 @@ post_process_relocs (bfd *abfd)
     {
       relent = relocs[j];
 
-      if (relent->base.howto->pc_relative || strcmp(relent->symbol->name, seg->asect->name))
+      if (relent->base.howto->pc_relative || relent->symbol == NULL || strcmp(relent->symbol->name, seg->asect->name))
         continue;
       
       pp = &seg->asect->contents[relent->base.address];
