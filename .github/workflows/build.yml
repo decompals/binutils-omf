@@ -9,12 +9,18 @@ jobs:
       INSTALL_DIR: "/tmp/binutils"
 
     steps:
-      - uses: actions/checkout@v3
-   
+      - uses: actions/checkout@v4
+
       - name: Setup build environment
         run: |
             sudo apt-get update
-            sudo apt-get install -y build-essential libgmp-dev libmpfr-dev
+            sudo apt-get install -y \
+              bison \
+              build-essential \
+              flex \
+              libgmp-dev \
+              libmpfr-dev \
+              texinfo
 
       - name: Configure
         run: |
@@ -31,18 +37,18 @@ jobs:
           cd build
           make
           make install
-   
+
       - name: Package
         run: |
             tar -czvf omftools-linux-x86_64.tar.gz --transform='s|nm|omf-nm|' --transform='s|objdump|omf-objdump|' -C $INSTALL_DIR/bin nm objdump
             tar -czvf binutils-linux-x86_64.tar.gz -C $INSTALL_DIR bin include lib share
-          
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
             name: binutils-linux-x86_64.tar.gz
             path: ./binutils-linux-x86_64.tar.gz
-      
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
